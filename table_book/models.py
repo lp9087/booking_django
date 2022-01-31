@@ -32,9 +32,8 @@ class Queue(models.Model):
 class Booking(models.Model):
     table_number = models.ForeignKey('Tables', on_delete=models.CASCADE, related_name='table')
     guest = models.ForeignKey('Queue', on_delete=models.CASCADE, related_name='guest')
-    date = models.DateField('Дата бронирования', auto_now=False, auto_now_add=False)
-    beginning_time = models.TimeField('Время начала бронирования', auto_now=False, auto_now_add=False)
-    ending_time = models.TimeField('Время конца бронирования', auto_now=False, auto_now_add=False, default='23:59:00')
+    beginning_time = models.DateTimeField('Время начала бронирования', auto_now=False, auto_now_add=False)
+    ending_time = models.DateTimeField('Время конца бронирования', auto_now=False, auto_now_add=False)
 
     class Meta:
         verbose_name = 'Бронь'

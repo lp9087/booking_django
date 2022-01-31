@@ -22,14 +22,14 @@ class BookingViewSet(ModelViewSet):
     serializer_class = BookingSerializer
 
     def create(self, request, *args, **kwargs):
-        date = request.data['date']
         beginning_time = request.data['beginning_time']
         ending_time = request.data["ending_time"]
         guests = request.data['guest']
         table_number = request.data['table_number']
         table = Tables.objects.filter(number=table_number).first()
         app = Queue.objects.filter(id=guests).first()
-        booking = Booking.objects.filter(table_number=table_number, date=date)
+        booking = Booking.objects.filter(table_number=table_number, beginning_time=beginning_time,
+                                         ending_time=ending_time)
 
         for book in booking:
             if str(book.beginning_time) <= beginning_time <= str(book.ending_time):
@@ -40,7 +40,7 @@ class BookingViewSet(ModelViewSet):
                 app.save()
             else:
                 return Response('Нет данной записи в очереди')
-            Booking.objects.create(table_number=table, guest=app, date=date, beginning_time=beginning_time,
+            Booking.objects.create(table_number=table, guest=app, beginning_time=beginning_time,
                                    ending_time=ending_time)
             return Response(f'Бронирование стола {table_number} успешно выполнено',
                             status=status.HTTP_201_CREATED)
