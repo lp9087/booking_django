@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from table_book.models import Tables, Application, Booking
+from table_book.models import Tables, Queue, Booking
 
 
 class TablesSerializer(ModelSerializer):
@@ -9,9 +9,9 @@ class TablesSerializer(ModelSerializer):
         fields = '__all__'
 
 
-class ApplicationSerializer(ModelSerializer):
+class QueueSerializer(ModelSerializer):
     class Meta:
-        model = Application
+        model = Queue
         fields = '__all__'
 
 

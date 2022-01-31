@@ -1,5 +1,5 @@
 from django.contrib import admin
-from table_book.models import Tables, Application, Booking
+from table_book.models import Tables, Queue, Booking
 
 
 @admin.register(Tables)
@@ -7,7 +7,7 @@ class TablesAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(Application)
+@admin.register(Queue)
 class ApplicationAdmin(admin.ModelAdmin):
     pass
 

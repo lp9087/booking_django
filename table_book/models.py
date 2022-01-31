@@ -4,7 +4,6 @@ from django.db import models
 class Tables(models.Model):
     number = models.DecimalField('Номер стола', max_digits=4, decimal_places=0, unique=True)
     seats = models.DecimalField('Количество мест', max_digits=4, decimal_places=0)
-    status = models.BooleanField('Свободен', default=True)
 
     def __str__(self):
         return f'Стол {self.number}: {self.seats} места'
@@ -14,17 +13,16 @@ class Tables(models.Model):
         verbose_name_plural = 'Столы'
 
 
-class Application(models.Model):
+class Queue(models.Model):
     name = models.CharField('ФИО', max_length=255)
-    date = models.DateField('Дата', auto_now=False, auto_now_add=False)
-    time = models.TimeField('Время', auto_now=False, auto_now_add=False)
     guest_number = models.DecimalField('Количество гостей', max_digits=4, decimal_places=0)
     phone_number = models.DecimalField('Номер телефона', max_digits=11, decimal_places=0)
-    note = models.CharField('Примечание', max_length=255, blank=True, null=True)
+    datetime = models.DateTimeField('Время желаемого бронирования', auto_now=False, auto_now_add=False)
+    note = models.CharField('Пожелания', max_length=255, blank=True, null=True)
     status = models.BooleanField('Статус заявки', default=False)
 
     def __str__(self):
-        return f'Имя {self.name}, количество гостей {self.guest_number}, время {self.time}'
+        return f'Имя {self.name}, количество гостей {self.guest_number}, дата {self.datetime.date()}, время {self.datetime.time()}'
 
     class Meta:
         verbose_name = 'Заявка'
@@ -33,7 +31,10 @@ class Application(models.Model):
 
 class Booking(models.Model):
     table_number = models.ForeignKey('Tables', on_delete=models.CASCADE, related_name='table')
-    guest = models.ForeignKey('Application', on_delete=models.CASCADE, related_name='guest')
+    guest = models.ForeignKey('Queue', on_delete=models.CASCADE, related_name='guest')
+    date = models.DateField('Дата бронирования', auto_now=False, auto_now_add=False)
+    beginning_time = models.TimeField('Время начала бронирования', auto_now=False, auto_now_add=False)
+    ending_time = models.TimeField('Время конца бронирования', auto_now=False, auto_now_add=False, default='23:59:00')
 
     class Meta:
         verbose_name = 'Бронь'
