@@ -1,9 +1,8 @@
 from django.db import models
-from django.db.models import SET_NULL
 
 
 class Tables(models.Model):
-    number = models.DecimalField('Номер стола', max_digits=4, decimal_places=0)
+    number = models.DecimalField('Номер стола', max_digits=4, decimal_places=0, unique=True)
     seats = models.DecimalField('Количество мест', max_digits=4, decimal_places=0)
     status = models.BooleanField('Свободен', default=True)
 
@@ -20,7 +19,8 @@ class Application(models.Model):
     date = models.DateField('Дата', auto_now=False, auto_now_add=False)
     time = models.TimeField('Время', auto_now=False, auto_now_add=False)
     guest_number = models.DecimalField('Количество гостей', max_digits=4, decimal_places=0)
-    note = models.CharField('Примечание', max_length=255,blank=True, null=True)
+    phone_number = models.DecimalField('Номер телефона', max_digits=11, decimal_places=0)
+    note = models.CharField('Примечание', max_length=255, blank=True, null=True)
     status = models.BooleanField('Статус заявки', default=False)
 
     def __str__(self):

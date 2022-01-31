@@ -15,7 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework.routers import SimpleRouter
+
+from table_book.views import TablesViewSet, ApplicationViewSet, BookingViewSet
+
+router = SimpleRouter()
+router.register(r'table', TablesViewSet)
+router.register(r'application', ApplicationViewSet)
+router.register(r'booking', BookingViewSet)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
+
+urlpatterns += router.urls
