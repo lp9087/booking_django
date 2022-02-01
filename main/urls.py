@@ -20,9 +20,9 @@ from rest_framework.routers import SimpleRouter
 from table_book.views import TablesViewSet, QueueViewSet, BookingViewSet
 
 router = SimpleRouter()
-router.register(r'table', TablesViewSet)
-router.register(r'application', QueueViewSet)
-router.register(r'booking', BookingViewSet)
+router.register(r'api/table', TablesViewSet)
+router.register(r'api/application', QueueViewSet)
+router.register(r'api/booking', BookingViewSet)
 
 
 urlpatterns = [
