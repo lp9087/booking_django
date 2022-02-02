@@ -17,10 +17,10 @@ from django.contrib import admin
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 
-from table_book.views import TablesViewSet, QueueViewSet, BookingViewSet
+from table_book.views import TablesAPIView, QueueViewSet, BookingViewSet
 
 router = SimpleRouter()
-router.register(r'api/table', TablesViewSet)
+router.register(r'api/table', TablesAPIView)
 router.register(r'api/application', QueueViewSet)
 router.register(r'api/booking', BookingViewSet)
 

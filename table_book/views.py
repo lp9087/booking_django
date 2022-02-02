@@ -1,13 +1,13 @@
 from rest_framework import status
-from rest_framework.generics import GenericAPIView, CreateAPIView
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
-
+from rest_framework.viewsets import ModelViewSet
+from braces.views import CsrfExemptMixin
 from table_book.models import Tables, Queue, Booking
 from table_book.serializers import TablesSerializer, QueueSerializer, BookingSerializer
 
 
-class TablesViewSet(ModelViewSet):
+class TablesAPIView(CsrfExemptMixin, ModelViewSet):
+    authentication_classes = []
     queryset = Tables.objects.all()
     serializer_class = TablesSerializer
 

@@ -35,6 +35,9 @@ class Booking(models.Model):
     beginning_time = models.DateTimeField('Время начала бронирования', auto_now=False, auto_now_add=False)
     ending_time = models.DateTimeField('Время конца бронирования', auto_now=False, auto_now_add=False)
 
+    def __str__(self):
+        return f'{self.guest.name}: {self.guest.guest_number} гостей'
+
     class Meta:
         verbose_name = 'Бронь'
         verbose_name_plural = 'Брони'
