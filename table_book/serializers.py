@@ -14,6 +14,7 @@ class BookingSerializer(serializers.ModelSerializer):
     guest = serializers.CharField(source="guest.name")
     guest_number = serializers.CharField(source="guest.guest_number")
     guest_phone_number = serializers.CharField(source="guest.phone_number")
+    table = serializers.CharField(source="table_number.number")
 
     class Meta:
         model = Booking
@@ -24,7 +25,7 @@ class TablesSerializer(serializers.ModelSerializer):
     booking = serializers.SerializerMethodField()
 
     def get_booking(self, instance):
-        return instance.booking.all().first() is not None
+        return instance.table.all().first() is not None
 
     class Meta:
         model = Tables
