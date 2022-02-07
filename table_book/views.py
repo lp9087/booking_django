@@ -12,12 +12,14 @@ class TablesAPIView(CsrfExemptMixin, ModelViewSet):
     serializer_class = TablesSerializer
 
 
-class QueueViewSet(ModelViewSet):
+class QueueViewSet(CsrfExemptMixin, ModelViewSet):
+    authentication_classes = []
     queryset = Queue.objects.all()
     serializer_class = QueueSerializer
 
 
-class BookingViewSet(ModelViewSet):
+class BookingViewSet(CsrfExemptMixin, ModelViewSet):
+    authentication_classes = []
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
 
