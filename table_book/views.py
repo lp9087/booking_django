@@ -18,6 +18,12 @@ class QueueViewSet(CsrfExemptMixin, ModelViewSet):
     serializer_class = QueueSerializer
 
 
+class App_for_book(CsrfExemptMixin, ModelViewSet):
+    authentication_classes = []
+    queryset = Queue.objects.filter(status=False)
+    serializer_class = QueueSerializer
+
+
 class BookingViewSet(CsrfExemptMixin, ModelViewSet):
     authentication_classes = []
     queryset = Booking.objects.all()
