@@ -1,7 +1,6 @@
 from rest_framework import status
-from rest_framework.generics import GenericAPIView, CreateAPIView
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework.viewsets import ModelViewSet
 
 from table_book.models import Tables, Application, Booking
 from table_book.serializers import TablesSerializer, ApplicationSerializer, BookingSerializer
@@ -22,8 +21,8 @@ class BookingViewSet(ModelViewSet):
     serializer_class = BookingSerializer
 
     def create(self, request, *args, **kwargs):
-        data_guets = request.data['guest']
-        data_table_number = request.data['table_number']
+        data_guets = request.data[0]['guest']
+        data_table_number = request.data[0]['table_number']
         table = Tables.objects.filter(number=data_table_number).first()
         app = Application.objects.filter(id=data_guets).first()
         if table:
@@ -43,8 +42,8 @@ class BookingViewSet(ModelViewSet):
             return Response('Данный стол отсутствует')
 
     def delete(self, request, *args, **kwargs):
-        data_guets = request.data['guest']
-        data_table_number = request.data['table_number']
+        data_guets = request.data[0]['guest']
+        data_table_number = request.data[0]['table_number']
         table = Tables.objects.filter(number=data_table_number).first()
         app = Application.objects.filter(id=data_guets).first()
         if table:
