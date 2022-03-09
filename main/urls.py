@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 
+from table_book import views
 from table_book.views import TablesAPIView, QueueViewSet, BookingViewSet, App_for_book
 
 router = SimpleRouter()
@@ -28,6 +29,7 @@ router.register(r'api/app_for_book', App_for_book)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.example, name="homepage"),
 ]
 
 urlpatterns += router.urls
