@@ -17,30 +17,38 @@ class ApplicationViewSet(ModelViewSet):
     serializer_class = ApplicationSerializer
 
 
+class AppBookingViewSet(ModelViewSet):
+    queryset = Application.objects.all()
+    serializer_class = ApplicationSerializer
+
+
+class AppWithBookViewSet(ModelViewSet):
+    queryset = Application.objects.filter(status=True)
+    serializer_class = ApplicationSerializer
+
+
 class BookingViewSet(ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
 
     def create(self, request, *args, **kwargs):
-        data_guets = request.data['guest']
-        data_table_number = request.data['table_number']
-        table = Tables.objects.filter(number=data_table_number).first()
-        app = Application.objects.filter(id=data_guets).first()
-        if table:
-            if app:
-                if table.status:
-                    table.status = False
-                    table.save()
-                else:
-                    return Response('Стол занят')
-                app.status = True
-                app.save()
-            else:
-                return Response('Нет данной записи в очереди')
-            Booking.objects.create(table_number=table, guest=app)
-            return Response(f'Бронирование стола {data_table_number} успешно выполнено', status=status.HTTP_201_CREATED)
+        guest = request.data.get('guest')
+        app_table = request.data.get('table_number')
+        try:
+            book_table = Tables.objects.get(id=app_table['id'])
+            book_guest = Application.objects.get(id=guest['id'])
+        except BaseException as e:
+            return Response(e.args, status=status.HTTP_400_BAD_REQUEST)
+
+        if book_table.status:
+            book_table.status = False
+            book_table.save()
         else:
-            return Response('Данный стол отсутствует')
+            return Response('Стол занят')
+        Booking.objects.create(table_number_id=book_table.id, guest_id=book_guest.id)
+        book_guest.status = True
+        book_guest.save()
+        return Response(f'Бронирование стола {book_table} успешно выполнено', status=status.HTTP_201_CREATED)
 
     def delete(self, request, *args, **kwargs):
         data_guets = request.data['guest']

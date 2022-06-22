@@ -2,8 +2,8 @@ from django.db import models
 
 
 class Tables(models.Model):
-    number = models.DecimalField('Номер стола', max_digits=4, decimal_places=0, unique=True)
-    seats = models.DecimalField('Количество мест', max_digits=4, decimal_places=0)
+    number = models.IntegerField('Номер стола', unique=True)
+    seats = models.IntegerField('Количество мест')
     status = models.BooleanField('Свободен', default=True)
 
     def __str__(self):
@@ -16,15 +16,14 @@ class Tables(models.Model):
 
 class Application(models.Model):
     name = models.CharField('ФИО', max_length=255)
-    date = models.DateField('Дата', auto_now=False, auto_now_add=False)
-    time = models.TimeField('Время', auto_now=False, auto_now_add=False)
-    guest_number = models.DecimalField('Количество гостей', max_digits=4, decimal_places=0)
+    datetime = models.DateTimeField('Дата и время', auto_now=False, auto_now_add=False)
+    guest_number = models.IntegerField('Количество гостей')
     phone_number = models.DecimalField('Номер телефона', max_digits=11, decimal_places=0)
     note = models.CharField('Примечание', max_length=255, blank=True, null=True)
     status = models.BooleanField('Статус заявки', default=False)
 
     def __str__(self):
-        return f'Имя {self.name}, количество гостей {self.guest_number}, время {self.time}'
+        return f'Имя {self.name}, количество гостей {self.guest_number}, время {self.datetime}'
 
     class Meta:
         verbose_name = 'Заявка'
@@ -33,7 +32,7 @@ class Application(models.Model):
 
 class Booking(models.Model):
     table_number = models.ForeignKey('Tables', on_delete=models.CASCADE, related_name='table')
-    guest = models.ForeignKey('Application', on_delete=models.CASCADE, related_name='guest')
+    guest = models.ForeignKey('Application', on_delete=models.CASCADE, related_name='booking')
 
     class Meta:
         verbose_name = 'Бронь'
