@@ -27,6 +27,16 @@ class AppWithBookViewSet(ModelViewSet):
     serializer_class = ApplicationSerializer
 
 
+class AppWithoutBookViewSet(ModelViewSet):
+    queryset = Application.objects.filter(status=False)
+    serializer_class = ApplicationSerializer
+
+
+class FreeTablesViewSet(ModelViewSet):
+    queryset = Tables.objects.filter(status=True)
+    serializer_class = TablesSerializer
+
+
 class BookingViewSet(ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
@@ -50,28 +60,18 @@ class BookingViewSet(ModelViewSet):
         book_guest.save()
         return Response(f'Бронирование стола {book_table} успешно выполнено', status=status.HTTP_201_CREATED)
 
-    def delete(self, request, *args, **kwargs):
-        data_guets = request.data['guest']
-        data_table_number = request.data['table_number']
-        table = Tables.objects.filter(number=data_table_number).first()
-        app = Application.objects.filter(id=data_guets).first()
-        if table:
-            if not table.status:
-                table.status = True
-                table.save()
-                Booking.objects.filter(table_number=table, guest=app).delete()
-                if app:
-                    app.delete()
-                else:
-                    return Response('Нет данной записи в очереди')
-                return Response(f'Бронирование стола {data_table_number} закончено', status=status.HTTP_201_CREATED)
-            else:
-                return Response('Неккоректное бронирование - стол свободен')
-        else:
-            return Response('Данный стол отсутствует')
+    def destroy(self, request, *args, **kwargs):
+        book_guest = Booking.objects.get(guest_id=kwargs.get('pk'))
+        app_guest = Application.objects.get(id=kwargs.get('pk'))
+        table = Booking.objects.select_related('table_number').get(guest_id=kwargs.get('pk')).table_number
 
+        book_guest.delete()
 
+        app_guest.delete()
 
+        table.status = True
+        table.save()
+        return Response(f'Удаление брони успешно выполнено', status=status.HTTP_204_NO_CONTENT)
 
 
 

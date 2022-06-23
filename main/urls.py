@@ -17,13 +17,16 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import SimpleRouter
 
-from table_book.views import TablesViewSet, ApplicationViewSet, BookingViewSet, AppWithBookViewSet
+from table_book.views import TablesViewSet, ApplicationViewSet, BookingViewSet, AppWithBookViewSet, FreeTablesViewSet, \
+    AppWithoutBookViewSet
 
 router = SimpleRouter()
 router.register(r'table', TablesViewSet)
 router.register(r'application', ApplicationViewSet)
 router.register(r'booking', BookingViewSet, basename='book')
 router.register(r'app_with_book', AppWithBookViewSet, basename='app_with_book')
+router.register(r'free_tables', FreeTablesViewSet, basename='free_tables')
+router.register(r'app_without_book', AppWithoutBookViewSet, basename='app_without_book')
 
 
 urlpatterns = [
